@@ -1,0 +1,65 @@
+[
+  {
+    "id": "jasper",
+    "name": "Jasper National Park",
+    "lat": 52.8734,
+    "lng": -117.9543,
+    "type": "National Park",
+    "description": "A UNESCO Dark Sky Preserve — one of the darkest, largest protected dark sky areas in the world. Mountain-framed horizons and zero light pollution make every aurora unforgettable.",
+    "lightPollution": 1
+  },
+  {
+    "id": "elk-island",
+    "name": "Elk Island National Park",
+    "lat": 53.6167,
+    "lng": -112.8833,
+    "type": "National Park",
+    "description": "Only 35 km east of Edmonton, this dark sky preserve is the most accessible spot in Alberta for aurora chasers who need a quick escape from the city.",
+    "lightPollution": 2
+  },
+  {
+    "id": "abraham-lake",
+    "name": "Abraham Lake",
+    "lat": 52.2167,
+    "lng": -116.5333,
+    "type": "Provincial Lake",
+    "description": "A reservoir along the North Saskatchewan River famous for its bubbling ice in winter and stunning wide-open skies. Reflections on the water double the aurora spectacle.",
+    "lightPollution": 2
+  },
+  {
+    "id": "kananaskis",
+    "name": "Kananaskis Country",
+    "lat": 50.9833,
+    "lng": -115.0167,
+    "type": "Provincial Park",
+    "description": "A vast wilderness southwest of Calgary with minimal light pollution and dramatic mountain silhouettes. Multiple viewpoints and camping areas give photographers great options.",
+    "lightPollution": 3
+  },
+  {
+    "id": "writing-on-stone",
+    "name": "Writing-on-Stone Provincial Park",
+    "lat": 49.0833,
+    "lng": -111.6167,
+    "type": "Provincial Park",
+    "description": "A UNESCO World Heritage Site near the US border. The Milk River valley's hoodoos create a surreal foreground for southern Alberta aurora displays.",
+    "lightPollution": 2
+  },
+  {
+    "id": "banff",
+    "name": "Banff National Park",
+    "lat": 51.4968,
+    "lng": -115.9281,
+    "type": "National Park",
+    "description": "Canada's first national park combines world-class dark skies with iconic mountain scenery. Lake Minnewanka and the Bow Valley Parkway are prime viewing corridors.",
+    "lightPollution": 2
+  },
+  {
+    "id": "cypress-hills",
+    "name": "Cypress Hills Interprovincial Park",
+    "lat": 49.65,
+    "lng": -110.3833,
+    "type": "Provincial Park",
+    "description": "Sitting above the surrounding plains at over 1,400 m, Cypress Hills offers some of the darkest skies in southeastern Alberta with a 360° horizon away from any city glow.",
+    "lightPollution": 1
+  }
+]
