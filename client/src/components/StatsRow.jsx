@@ -1,43 +1,86 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Zap, MapPin, Cloud, Moon, RefreshCw } from 'lucide-react';
 
-function StatCard({ icon, label, value, accentColor = '#8b5cf6', loading }) {
+const KP_TOOLTIP = "The KP Index measures Earth's geomagnetic activity on a 0–9 scale. Higher KP means stronger geomagnetic storms, which push the aurora further south. KP 4+ is typically needed to see aurora in northern Alberta. KP 6+ can bring aurora visible from Calgary.";
+
+function KpTooltip() {
+  const [show, setShow] = useState(false);
+  return (
+    <span
+      style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}
+    >
+      <span style={{
+        width: 14, height: 14, borderRadius: '50%',
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        border: `1px solid ${show ? '#00ff9d' : '#334155'}`,
+        color: show ? '#00ff9d' : '#475569',
+        fontSize: '0.5625rem', fontWeight: 700, cursor: 'help',
+        transition: 'color 0.15s, border-color 0.15s',
+        lineHeight: 1, userSelect: 'none', flexShrink: 0,
+      }}>?</span>
+      {show && (
+        <div style={{
+          position: 'absolute', top: '100%', left: 0, marginTop: 7, zIndex: 100,
+          background: '#1a1f30', border: '1px solid #2d3a52', borderRadius: 8,
+          padding: '10px 12px', width: 280,
+          fontSize: '0.8125rem', color: '#cbd5e1', lineHeight: 1.55,
+          boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+          pointerEvents: 'none',
+        }}>
+          {KP_TOOLTIP}
+        </div>
+      )}
+    </span>
+  );
+}
+
+function StatCard({ icon, label, value, context, loading, mono = false, labelExtra }) {
   return (
     <div
-      className="rounded-xl p-4 flex items-center gap-3"
+      className="rounded-lg p-4 flex items-start gap-3"
       style={{
-        background: '#242938',
-        border: '1px solid rgba(139, 92, 246, 0.12)',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.04)',
+        background: '#131722',
+        border: '1px solid #1e2638',
       }}
     >
       <div
-        className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center"
-        style={{ background: `${accentColor}18`, color: '#00ff88' }}
+        className="flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center mt-0.5"
+        style={{ background: 'rgba(0,255,157,0.08)', color: '#00ff9d' }}
       >
         {icon}
       </div>
-      <div className="min-w-0">
-        <div style={{ fontSize: '0.6875rem', fontWeight: 500, color: '#8b5cf6', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>
-          {label}
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-1.5" style={{ marginBottom: '4px' }}>
+          <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            {label}
+          </span>
+          {labelExtra}
         </div>
         {loading ? (
-          <div className="h-6 w-24 rounded-lg animate-pulse" style={{ background: '#2e3549' }} />
+          <>
+            <div className="h-6 w-24 rounded animate-pulse mb-1" style={{ background: '#1e2638' }} />
+            <div className="h-3 w-32 rounded animate-pulse" style={{ background: '#1e2638' }} />
+          </>
         ) : (
-          <div style={{ fontSize: '1rem', fontWeight: 600, color: '#ffffff', textShadow: `0 0 14px ${accentColor}55`, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {value ?? '--'}
-          </div>
+          <>
+            <div style={{
+              fontSize: '1.5rem', fontWeight: 700, color: '#ffffff', lineHeight: 1.1,
+              fontFamily: mono ? "'JetBrains Mono', monospace" : "'Inter', sans-serif",
+              fontVariantNumeric: 'tabular-nums',
+              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+            }}>
+              {value ?? '--'}
+            </div>
+            <div style={{ fontSize: '0.75rem', fontWeight: 400, color: '#94a3b8', marginTop: '3px', lineHeight: 1.3 }}>
+              {context}
+            </div>
+          </>
         )}
       </div>
     </div>
   );
-}
-
-function kpColor(kp) {
-  if (kp === null || kp === undefined) return '#9ca3af';
-  if (kp >= 5) return '#00b87a';
-  if (kp >= 3) return '#f59e0b';
-  return '#ef4444';
 }
 
 function formatTimestamp(date) {
@@ -49,7 +92,6 @@ function formatTimestamp(date) {
 }
 
 export default function StatsRow({ kp, moon, topLocation, loading, lastUpdated, onRefresh }) {
-  const kpCol   = kpColor(kp);
   const timeStr = formatTimestamp(lastUpdated);
 
   return (
@@ -57,8 +99,8 @@ export default function StatsRow({ kp, moon, topLocation, loading, lastUpdated, 
       {/* Timestamp + refresh */}
       <div className="flex justify-end items-center gap-2 mb-2 min-h-[20px]">
         {timeStr && (
-          <span style={{ fontSize: '11px', color: '#6b7280' }}>
-            Last updated: <span style={{ color: '#9ca3af' }}>{timeStr}</span>
+          <span style={{ fontSize: '0.75rem', color: '#475569', fontFamily: "'JetBrains Mono', monospace" }}>
+            Updated {timeStr}
           </span>
         )}
         <button
@@ -66,32 +108,55 @@ export default function StatsRow({ kp, moon, topLocation, loading, lastUpdated, 
           disabled={loading}
           title="Refresh data"
           style={{
-            width: 24, height: 24,
+            width: 26, height: 26,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             background: 'transparent',
-            border: '1px solid rgba(139, 92, 246, 0.2)',
-            color: loading ? '#00ff88' : '#6b7280',
+            border: '1px solid #1e2638',
+            color: loading ? '#00ff9d' : '#475569',
             cursor: loading ? 'default' : 'pointer',
-            borderRadius: 8,
+            borderRadius: 6,
             transition: 'color 0.15s, border-color 0.15s',
           }}
-          onMouseEnter={e => { if (!loading) { e.currentTarget.style.color = '#00ff88'; e.currentTarget.style.borderColor = 'rgba(0,255,136,0.3)'; } }}
-          onMouseLeave={e => { if (!loading) { e.currentTarget.style.color = '#6b7280'; e.currentTarget.style.borderColor = 'rgba(139,92,246,0.2)'; } }}
+          onMouseEnter={e => { if (!loading) { e.currentTarget.style.color = '#00ff9d'; e.currentTarget.style.borderColor = '#00ff9d'; } }}
+          onMouseLeave={e => { if (!loading) { e.currentTarget.style.color = '#475569'; e.currentTarget.style.borderColor = '#1e2638'; } }}
         >
           <RefreshCw size={12} className={loading ? 'animate-spin' : ''} style={{ flexShrink: 0 }} />
         </button>
       </div>
 
-      {/* 4-column stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <StatCard loading={loading} icon={<Zap size={18} />}    label="KP Index"
-          value={kp !== null ? `${kp.toFixed(1)} / 9` : '--'}   accentColor={kpCol} />
-        <StatCard loading={loading} icon={<MapPin size={18} />}  label="Best Tonight"
-          value={topLocation?.name?.split(' ').slice(0, 2).join(' ')} accentColor="#00b87a" />
-        <StatCard loading={loading} icon={<Cloud size={18} />}   label="Cloud Cover"
-          value={topLocation ? `${topLocation.cloudPct}%` : '--'} accentColor="#60a5fa" />
-        <StatCard loading={loading} icon={<Moon size={18} />}    label="Moon"
-          value={moon ? `${moon.pct}% lit` : '--'}               accentColor="#a78bfa" />
+        <StatCard
+          loading={loading}
+          icon={<Zap size={16} />}
+          label="KP Index"
+          labelExtra={<KpTooltip />}
+          value={kp !== null ? `${kp.toFixed(1)} / 9` : '--'}
+          context="0–9 scale, higher = more aurora"
+          mono
+        />
+        <StatCard
+          loading={loading}
+          icon={<MapPin size={16} />}
+          label="Best Tonight"
+          value={topLocation?.name?.split(' ').slice(0, 2).join(' ')}
+          context="Highest viewing score now"
+        />
+        <StatCard
+          loading={loading}
+          icon={<Cloud size={16} />}
+          label="Cloud Cover"
+          value={topLocation ? `${topLocation.cloudPct}%` : '--'}
+          context="Lower is better"
+          mono
+        />
+        <StatCard
+          loading={loading}
+          icon={<Moon size={16} />}
+          label="Moon Phase"
+          value={moon ? `${moon.pct}% lit` : '--'}
+          context="Lower is better"
+          mono
+        />
       </div>
     </div>
   );

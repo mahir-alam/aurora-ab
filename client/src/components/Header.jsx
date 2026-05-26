@@ -8,73 +8,60 @@ const LEVEL_LABEL = {
 };
 
 const LEVEL_COLOR = {
-  Storm:     '#00b87a',
-  Active:    '#00b87a',
-  Unsettled: '#f59e0b',
+  Storm:     '#00ff9d',
+  Active:    '#00ff9d',
+  Unsettled: '#fbbf24',
   Quiet:     '#ef4444',
 };
 
 function kpSolid(kp) {
-  if (kp >= 5) return '#00b87a';
-  if (kp >= 3) return '#f59e0b';
-  return '#ef4444';
-}
-
-function kpGlow(kp) {
-  if (kp >= 5) return '#00b87a';
-  if (kp >= 3) return '#f59e0b';
+  if (kp >= 5) return '#00ff9d';
+  if (kp >= 3) return '#fbbf24';
   return '#ef4444';
 }
 
 export default function Header({ kp, tonightForecast, loading }) {
   const solidColor   = kpSolid(kp);
-  const glowColor    = kpGlow(kp);
-  const isPulsing    = kp !== null && kp >= 4;
   const tonightLabel = tonightForecast ? (LEVEL_LABEL[tonightForecast.level] || tonightForecast.level) : null;
-  const tonightColor = tonightForecast ? (LEVEL_COLOR[tonightForecast.level] || '#9ca3af') : '#9ca3af';
+  const tonightColor = tonightForecast ? (LEVEL_COLOR[tonightForecast.level] || '#94a3b8') : '#94a3b8';
 
   return (
     <header
       className="relative overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, #1a1d2e 0%, #1e1640 25%, #241848 45%, #162a22 70%, #1a1d2e 100%)',
-        minHeight: '148px',
+        background: 'rgba(10,13,20,0.82)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        minHeight: '140px',
+        borderBottom: '1px solid #1e2638',
       }}
     >
       <div className="aurora-line-1" />
       <div className="aurora-line-2" />
       <div className="aurora-line-3" />
 
-      <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse at 15% 50%, rgba(139,92,246,0.10) 0%, transparent 55%), radial-gradient(ellipse at 85% 50%, rgba(0,184,122,0.08) 0%, transparent 55%)',
-      }} />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-7 flex items-center justify-between gap-6">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-6 flex items-center justify-between gap-6">
         {/* Brand */}
         <div>
-          <div className="flex items-center gap-3 mb-1">
-            <span className="text-3xl select-none" style={{ filter: 'drop-shadow(0 0 10px rgba(0,255,136,0.65))' }}>🌌</span>
-            <h1
-              className="font-bold aurora-text-glow"
-              style={{ fontSize: '2rem', letterSpacing: '-0.02em', lineHeight: 1.1, color: '#ffffff' }}
-            >
-              AuroraAB
+          <div className="flex items-center gap-3 mb-1.5">
+            <span className="text-2xl select-none">🌌</span>
+            <h1 style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#ffffff', margin: 0, lineHeight: 1 }}>
+              Aurora<span style={{ color: '#00ff9d' }}>AB</span>
             </h1>
           </div>
-          <p className="ml-12" style={{ fontSize: '0.875rem', color: '#9ca3af', maxWidth: '340px' }}>
+          <p className="ml-11" style={{ fontSize: '0.875rem', color: '#475569', lineHeight: 1.5 }}>
             Real-time aurora forecast for Alberta dark sky sites
           </p>
 
           {!loading && tonightLabel && (
-            <div className="flex items-center gap-2 mt-3 ml-12">
-              <span style={{ fontSize: '0.6875rem', color: '#6b7280', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+            <div className="flex items-center gap-2 mt-2.5 ml-11">
+              <span style={{ fontSize: '0.6875rem', color: '#475569', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                 Tonight
               </span>
               <span style={{
-                fontSize: '0.6875rem', fontWeight: 600, padding: '2px 10px', borderRadius: '9999px',
-                color: tonightColor, background: `${tonightColor}18`, border: `1px solid ${tonightColor}40`,
-                letterSpacing: '0.06em', textTransform: 'uppercase',
+                fontSize: '0.6875rem', fontWeight: 700, padding: '2px 8px', borderRadius: '3px',
+                color: '#0a0d14', background: tonightColor,
+                letterSpacing: '0.08em', textTransform: 'uppercase',
               }}>
                 {tonightLabel}
               </span>
@@ -85,24 +72,25 @@ export default function Header({ kp, tonightForecast, loading }) {
         {/* KP badge */}
         <div className="flex-shrink-0 text-center">
           {loading ? (
-            <div style={{ width: 86, height: 86, borderRadius: '50%', background: '#2a2f42', animation: 'pulse 1.5s ease-in-out infinite' }} />
+            <div style={{ width: 82, height: 82, borderRadius: '50%', background: '#131722', animation: 'pulse 1.5s ease-in-out infinite' }} />
           ) : (
             <div
-              className={isPulsing ? 'kp-pulsing' : ''}
               style={{
-                '--kp-glow': `${glowColor}55`,
-                width: 86, height: 86, borderRadius: '50%',
+                width: 82, height: 82, borderRadius: '50%',
                 background: solidColor,
-                boxShadow: `0 0 28px ${glowColor}60, 0 0 56px ${glowColor}28, 0 4px 16px rgba(0,0,0,0.5)`,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                 margin: '0 auto',
-                border: '3px solid rgba(255,255,255,0.85)',
+                border: '2px solid rgba(255,255,255,0.9)',
               }}
             >
-              <span style={{ fontSize: '27px', fontWeight: 700, color: 'white', lineHeight: 1 }}>
+              <span style={{
+                fontSize: '26px', fontWeight: 900, color: '#0a0d14', lineHeight: 1,
+                fontFamily: "'JetBrains Mono', monospace",
+                fontVariantNumeric: 'tabular-nums',
+              }}>
                 {kp !== null ? kp.toFixed(1) : '--'}
               </span>
-              <span style={{ fontSize: '8px', color: 'rgba(255,255,255,0.75)', marginTop: '3px', letterSpacing: '0.1em', fontWeight: 500, textTransform: 'uppercase' }}>
+              <span style={{ fontSize: '8px', color: 'rgba(0,0,0,0.55)', marginTop: '3px', letterSpacing: '0.12em', fontWeight: 700, textTransform: 'uppercase' }}>
                 KP Index
               </span>
             </div>

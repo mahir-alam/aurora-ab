@@ -45,7 +45,7 @@ export default function SearchBar({ onSearch, defaultValue }) {
     <div className="relative" style={{ maxWidth: '420px' }}>
       <form onSubmit={handleSubmit}>
         <div className="relative flex items-center">
-          <Search size={15} className="absolute left-3.5 pointer-events-none" style={{ color: '#6b7280' }} />
+          <Search size={15} className="absolute left-3.5 pointer-events-none" style={{ color: '#334155' }} />
           <input
             type="text"
             value={query}
@@ -55,28 +55,27 @@ export default function SearchBar({ onSearch, defaultValue }) {
             placeholder="Search your city in Alberta…"
             className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm focus:outline-none transition-all"
             style={{
-              background:  '#242938',
-              border:      `1px solid ${focused ? '#8b5cf6' : 'rgba(139, 92, 246, 0.15)'}`,
-              boxShadow:   focused ? '0 0 0 3px rgba(139, 92, 246, 0.12)' : 'none',
-              color:       '#e5e7eb',
+              background:  '#131722',
+              border:      `1px solid ${focused ? '#00ff9d' : '#1e2638'}`,
+              color:       '#f1f5f9',
             }}
           />
         </div>
       </form>
 
       {open && suggestions.length > 0 && (
-        <ul className="absolute z-50 mt-1 w-full rounded-xl overflow-hidden shadow-2xl"
-          style={{ background: '#242938', border: '1px solid rgba(139, 92, 246, 0.15)' }}>
+        <ul className="absolute z-50 mt-1 w-full rounded-xl overflow-hidden shadow-xl"
+          style={{ background: '#131722', border: '1px solid #1e2638' }}>
           {suggestions.map((f) => (
             <li
               key={f.id}
               onMouseDown={() => handleSelect(f)}
-              className="flex items-center gap-2.5 px-4 py-2.5 text-sm cursor-pointer"
-              style={{ color: '#e5e7eb', transition: 'background 0.1s' }}
-              onMouseEnter={e => e.currentTarget.style.background = '#2e3549'}
+              className="flex items-center gap-2.5 px-4 py-2.5 cursor-pointer"
+              style={{ fontSize: '0.9375rem', color: '#f1f5f9', transition: 'background 0.1s', borderBottom: '1px solid #1e2638' }}
+              onMouseEnter={e => e.currentTarget.style.background = '#1e2638'}
               onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
             >
-              <MapPin size={13} style={{ color: '#8b5cf6', flexShrink: 0 }} />
+              <MapPin size={13} style={{ color: '#00ff9d', flexShrink: 0 }} />
               <span className="truncate">{f.place_name}</span>
             </li>
           ))}
