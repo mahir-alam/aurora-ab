@@ -18,8 +18,8 @@ const MAP_STYLES = [
 ];
 
 function scoreToHex(score) {
-  if (score >= 70) return '#00b87a';
-  if (score >= 40) return '#f59e0b';
+  if (score >= 70) return '#00ff9d';
+  if (score >= 40) return '#fbbf24';
   return '#ef4444';
 }
 
@@ -39,10 +39,10 @@ function addRouteToMap(map, geometry, immediate = false) {
     source: ROUTE_SRC,
     layout: { 'line-join': 'round', 'line-cap': 'round' },
     paint: {
-      'line-width': 14,
-      'line-color': '#00ff88',
-      'line-opacity': 0.10,
-      'line-blur': 4,
+      'line-width': 12,
+      'line-color': '#00ff9d',
+      'line-opacity': 0.05,
+      'line-blur': 3,
       'line-trim-offset': immediate ? [0, 0] : [0, 1],
     },
   });
@@ -53,11 +53,11 @@ function addRouteToMap(map, geometry, immediate = false) {
     source: ROUTE_SRC,
     layout: { 'line-join': 'round', 'line-cap': 'round' },
     paint: {
-      'line-width': 4,
+      'line-width': 5,
       'line-gradient': [
         'interpolate', ['linear'], ['line-progress'],
-        0, '#00ff88',
-        1, '#8b5cf6',
+        0, '#00ff9d',
+        1, '#b266ff',
       ],
       'line-trim-offset': immediate ? [0, 0] : [0, 1],
     },
@@ -81,12 +81,12 @@ function StyleToggle({ mapStyle, onStyleChange }) {
         right: 12,
         zIndex: 10,
         display: 'flex',
-        background: 'rgba(36,41,56,0.96)',
+        background: 'rgba(19,23,34,0.97)',
         backdropFilter: 'blur(14px)',
-        borderRadius: 12,
-        border: '1px solid rgba(255,255,255,0.08)',
+        borderRadius: 10,
+        border: '1px solid #1e2638',
         overflow: 'hidden',
-        boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+        boxShadow: '0 4px 14px rgba(0,0,0,0.5)',
       }}
     >
       {MAP_STYLES.map((s, i) => {
@@ -101,10 +101,10 @@ function StyleToggle({ mapStyle, onStyleChange }) {
               fontSize: 15,
               lineHeight: 1,
               cursor: active ? 'default' : 'pointer',
-              background: active ? 'rgba(0,184,122,0.15)' : 'transparent',
+              background: active ? 'rgba(0,255,157,0.12)' : 'transparent',
               border: 'none',
-              borderLeft: i > 0 ? '1px solid rgba(255,255,255,0.08)' : 'none',
-              outline: active ? '1px solid rgba(0,184,122,0.4)' : 'none',
+              borderLeft: i > 0 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+              outline: active ? '1px solid rgba(0,255,157,0.4)' : 'none',
               outlineOffset: '-1px',
               color: 'white',
               transition: 'background 0.15s',
@@ -131,11 +131,11 @@ function RoutePanel({ activeRoute, onClear }) {
       style={{
         position: 'absolute',
         zIndex: 10,
-        background: 'rgba(36,41,56,0.97)',
+        background: 'rgba(19,23,34,0.98)',
         backdropFilter: 'blur(18px)',
-        borderRadius: 14,
-        border: '1px solid rgba(0,184,122,0.28)',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 0 24px rgba(0,184,122,0.08)',
+        borderRadius: 12,
+        border: '1px solid #1e2638',
+        boxShadow: '0 8px 24px rgba(0,0,0,0.6)',
         padding: '12px 14px',
         ...(isMobile
           ? { bottom: 12, left: 12, right: 12 }
@@ -147,7 +147,7 @@ function RoutePanel({ activeRoute, onClear }) {
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
         <div style={{
           width: 8, height: 8, borderRadius: '50%', flexShrink: 0,
-          background: '#00ff88', boxShadow: '0 0 7px #00ff88',
+          background: '#00ff9d',
         }} />
         <span style={{
           flex: 1, minWidth: 0, fontSize: 13, fontWeight: 700, color: 'white',
@@ -161,11 +161,11 @@ function RoutePanel({ activeRoute, onClear }) {
           style={{
             flexShrink: 0, width: 26, height: 26, borderRadius: 8,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            background: '#2e3549', border: '1px solid rgba(255,255,255,0.1)',
-            color: '#9ca3af', cursor: 'pointer', transition: 'color 0.15s, background 0.15s',
+            background: '#1e2638', border: '1px solid #334155',
+            color: '#94a3b8', cursor: 'pointer', transition: 'color 0.15s, background 0.15s',
           }}
-          onMouseEnter={e => { e.currentTarget.style.color = '#ef4444'; e.currentTarget.style.background = '#3a2020'; }}
-          onMouseLeave={e => { e.currentTarget.style.color = '#9ca3af'; e.currentTarget.style.background = '#2e3549'; }}
+          onMouseEnter={e => { e.currentTarget.style.color = '#ef4444'; e.currentTarget.style.background = '#2a1515'; }}
+          onMouseLeave={e => { e.currentTarget.style.color = '#94a3b8'; e.currentTarget.style.background = '#1e2638'; }}
         >
           <X size={13} />
         </button>
@@ -173,11 +173,11 @@ function RoutePanel({ activeRoute, onClear }) {
 
       {/* Row 2: drive stats */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 14px', marginBottom: 10 }}>
-        <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: '#9ca3af' }}>
-          <Car size={11} style={{ color: '#00ff88' }} />
+        <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, color: '#cbd5e1' }}>
+          <Car size={11} style={{ color: '#00ff9d' }} />
           {driveInfo.durationMin} min &nbsp;·&nbsp; {driveInfo.distanceKm} km
         </span>
-        <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: '#9ca3af' }}>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, color: '#cbd5e1' }}>
           <Clock size={11} style={{ color: '#fbbf24' }} />
           Leave by {driveInfo.leaveBy}
         </span>
@@ -196,23 +196,23 @@ function RoutePanel({ activeRoute, onClear }) {
           width: '100%',
           padding: '7px 12px',
           borderRadius: 10,
-          background: '#2e3549',
-          border: '1px solid rgba(255,255,255,0.1)',
-          color: '#e5e7eb',
+          background: '#1e2638',
+          border: '1px solid #334155',
+          color: '#94a3b8',
           fontSize: 12,
-          fontWeight: 600,
+          fontWeight: 500,
           textDecoration: 'none',
           cursor: 'pointer',
-          transition: 'background 0.15s, border-color 0.15s',
+          transition: 'background 0.15s, border-color 0.15s, color 0.15s',
           letterSpacing: '0.01em',
         }}
         onMouseEnter={e => {
-          e.currentTarget.style.background  = '#3a4460';
-          e.currentTarget.style.borderColor = 'rgba(139,92,246,0.4)';
+          e.currentTarget.style.borderColor = '#00ff9d';
+          e.currentTarget.style.color       = '#00ff9d';
         }}
         onMouseLeave={e => {
-          e.currentTarget.style.background  = '#2e3549';
-          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
+          e.currentTarget.style.borderColor = '#334155';
+          e.currentTarget.style.color       = '#94a3b8';
         }}
       >
         <ExternalLink size={13} style={{ flexShrink: 0 }} />
@@ -295,35 +295,33 @@ export default function MapView({ locations, userLocation, selected, onSelect, a
       const el = document.createElement('div');
       el.dataset.locId = loc.id;
       el.style.cssText = `
-        width:32px; height:32px; border-radius:50%;
-        background:${hex}; border:3px solid rgba(255,255,255,0.85);
+        width:36px; height:36px; border-radius:50%;
+        background:${hex}; border:2px solid rgba(255,255,255,0.9);
         cursor:pointer; display:flex; align-items:center; justify-content:center;
-        font-size:11px; font-weight:700; color:white;
-        box-shadow:0 2px 8px rgba(0,0,0,0.4), 0 0 10px ${hex}55;
-        transition:transform .15s, box-shadow .15s;
+        font-size:12px; font-weight:900; color:#0a0d14;
+        font-family:'JetBrains Mono',monospace;
+        transition:transform .15s;
         user-select:none;
       `;
       el.textContent = loc.score ?? '?';
 
       el.addEventListener('mouseenter', () => {
         if (!el.dataset.pulsing) {
-          el.style.transform = 'scale(1.22)';
-          el.style.boxShadow = `0 4px 14px rgba(0,0,0,0.5), 0 0 18px ${hex}80`;
+          el.style.transform = 'scale(1.2)';
         }
       });
       el.addEventListener('mouseleave', () => {
         if (!el.dataset.pulsing) {
           el.style.transform = 'scale(1)';
-          el.style.boxShadow = `0 2px 8px rgba(0,0,0,0.4), 0 0 10px ${hex}55`;
         }
       });
 
       const popup = new mapboxgl.Popup({ offset: 22, closeButton: false, maxWidth: '220px' })
         .setHTML(`
           <div style="font-family:'Inter',system-ui,sans-serif">
-            <div style="font-weight:600;font-size:13px;color:#fff;margin-bottom:3px">${loc.name}</div>
+            <div style="font-weight:600;font-size:13px;color:#f1f5f9;margin-bottom:3px">${loc.name}</div>
             <div style="font-size:12px;color:${hex};font-weight:600">${loc.scoreLabel} · ${loc.score}/100</div>
-            <div style="font-size:11px;color:#9ca3af;margin-top:2px">☁️ ${loc.cloudPct ?? '--'}% cloud cover</div>
+            <div style="font-size:11px;color:#94a3b8;margin-top:2px">☁️ ${loc.cloudPct ?? '--'}% cloud cover</div>
           </div>
         `);
 
@@ -395,9 +393,8 @@ export default function MapView({ locations, userLocation, selected, onSelect, a
     const startEl = document.createElement('div');
     startEl.style.cssText = `
       width:18px; height:18px; border-radius:50%;
-      background:radial-gradient(circle at 40% 35%, #00ff88, #00aa55);
-      border:2.5px solid white;
-      box-shadow:0 0 10px #00ff8899, 0 0 20px #00ff8844;
+      background:#00ff9d;
+      border:2px solid rgba(255,255,255,0.9);
     `;
     startMarkerRef.current = new mapboxgl.Marker({ element: startEl })
       .setLngLat([userLocation.lng, userLocation.lat])
@@ -416,8 +413,8 @@ export default function MapView({ locations, userLocation, selected, onSelect, a
         styleTag.id = 'dest-pulse-kf';
         styleTag.textContent = `
           @keyframes dest-pulse {
-            0%,100% { transform:scale(1);   box-shadow:0 0 14px ${hex}55; }
-            50%      { transform:scale(1.35); box-shadow:0 0 30px ${hex}cc, 0 0 50px ${hex}55; }
+            0%,100% { transform:scale(1); }
+            50%      { transform:scale(1.3); }
           }
         `;
         document.head.appendChild(styleTag);
@@ -459,15 +456,15 @@ export default function MapView({ locations, userLocation, selected, onSelect, a
         <div style={{
           position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
-          background: '#242938', borderRadius: '12px', border: '1px solid rgba(139,92,246,0.12)',
+          background: '#131722', borderRadius: '12px', border: '1px solid #1e2638',
         }}>
           <MapPin size={36} style={{ color: '#374151' }} />
           <p style={{ color: '#9ca3af', fontSize: 14, marginTop: 12, textAlign: 'center', padding: '0 24px' }}>
             Map requires a Mapbox token.
           </p>
           <p style={{ color: '#6b7280', fontSize: 12, marginTop: 4 }}>
-            Add <code style={{ color: '#8b5cf6' }}>VITE_MAPBOX_TOKEN</code> to{' '}
-            <code style={{ color: '#8b5cf6' }}>client/.env</code>
+            Add <code style={{ color: '#b266ff' }}>VITE_MAPBOX_TOKEN</code> to{' '}
+            <code style={{ color: '#b266ff' }}>client/.env</code>
           </p>
         </div>
       )}

@@ -1,32 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Cloud, Car, Clock, Navigation, CheckCircle } from 'lucide-react';
+import { Cloud, Car, Clock, Calendar, Navigation, CheckCircle } from 'lucide-react';
 
-const CARD_BG      = '#242938';
-const CARD_BORDER  = 'rgba(139, 92, 246, 0.12)';
+const CARD_BG     = '#131722';
+const CARD_BORDER = '#1e2638';
 
 function getStyle(score) {
-  if (score >= 70) return {
-    solid: '#00b87a',
-    glow:  'rgba(0, 184, 122, 0.38)',
-    hex:   '#00b87a',
-    leftBorder:  '#00b87a',
-    tintBorder:  'rgba(0, 184, 122, 0.28)',
-  };
-  if (score >= 40) return {
-    solid: '#f59e0b',
-    glow:  'rgba(245, 158, 11, 0.38)',
-    hex:   '#f59e0b',
-    leftBorder:  '#f59e0b',
-    tintBorder:  'rgba(245, 158, 11, 0.28)',
-  };
-  return {
-    solid: '#ef4444',
-    glow:  'rgba(239, 68, 68, 0.38)',
-    hex:   '#ef4444',
-    leftBorder:  '#ef4444',
-    tintBorder:  'rgba(239, 68, 68, 0.28)',
-  };
+  if (score >= 70) return { solid: '#00ff9d', hex: '#00ff9d' };
+  if (score >= 40) return { solid: '#fbbf24', hex: '#fbbf24' };
+  return              { solid: '#ef4444', hex: '#ef4444' };
 }
 
 export default function LocationCard({ location, userLocation, isTop, isSelected, isRouteActive, onShowRoute, onClick }) {
@@ -61,117 +43,127 @@ export default function LocationCard({ location, userLocation, isTop, isSelected
     }
   };
 
-  // Card styling
-  const cardBg = isRouteActive ? '#1a2c24'
-    : isSelected ? '#272040'
+  const cardBg = isRouteActive ? '#131722'
+    : isSelected ? '#131722'
     : CARD_BG;
 
-  const borderStyleObj = isRouteActive
-    ? { border: '1px solid rgba(0, 184, 122, 0.45)' }
+  const borderStyle = isRouteActive
+    ? { border: `1px solid rgba(0,255,157,0.4)` }
     : isSelected
-    ? { border: '1px solid rgba(139, 92, 246, 0.42)' }
+    ? { border: `1px solid rgba(178,102,255,0.35)` }
     : isTop
     ? {
-        borderTop:    `1px solid ${s.tintBorder}`,
+        borderTop:    `1px solid ${CARD_BORDER}`,
         borderRight:  `1px solid ${CARD_BORDER}`,
         borderBottom: `1px solid ${CARD_BORDER}`,
-        borderLeft:   `4px solid ${s.leftBorder}`,
+        borderLeft:   `4px solid ${s.solid}`,
       }
     : { border: `1px solid ${CARD_BORDER}` };
 
-  const shadowVal = isRouteActive
-    ? '0 0 0 2px rgba(0,184,122,0.18), 0 4px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)'
-    : isSelected
-    ? '0 0 0 2px rgba(139,92,246,0.18), 0 8px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)'
-    : isTop
-    ? undefined  // CSS animation card-best-pulse controls this
-    : '0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.04)';
-
-  // isTop left border is 4px vs 1px on others — compensate padding so content aligns
-  const pad = isTop ? '14px 14px 14px 10px' : '12px';
+  // isTop 4px left border — compensate left padding
+  const padLeft = isTop ? '12px' : '16px';
 
   return (
     <div
       onClick={onClick}
-      className={`card-lift rounded-xl cursor-pointer${isTop && !isRouteActive && !isSelected ? ' card-best-pulse' : ''}`}
+      className="card-lift cursor-pointer"
       style={{
+        position: 'relative',
         background: cardBg,
-        ...borderStyleObj,
-        boxShadow: shadowVal,
-        padding: pad,
-        '--best-glow':     s.glow,
-        '--best-glow-dim': `${s.hex}22`,
+        ...borderStyle,
+        borderRadius: 8,
+        padding: `16px 16px 16px ${padLeft}`,
       }}
     >
-      <div className="flex items-start gap-3">
-        {/* Score badge */}
+      {/* Best Tonight badge — absolute top-right */}
+      {isTop && !isRouteActive && (
         <div
-          className="flex-shrink-0 flex items-center justify-center rounded-full"
+          className="best-badge-pulse"
           style={{
-            width:  isTop ? 60 : 50,
-            height: isTop ? 60 : 50,
-            background: s.solid,
-            border: '3px solid rgba(255, 255, 255, 0.85)',
-            boxShadow: `0 0 16px ${s.glow}, 0 2px 8px rgba(0,0,0,0.35)`,
-            flexShrink: 0,
+            position: 'absolute', top: 10, right: 10,
+            display: 'flex', alignItems: 'center', gap: '3px',
+            padding: '2px 8px', borderRadius: '9999px',
+            background: s.solid, color: '#0a0d14',
+            fontSize: '0.5625rem', fontWeight: 700, letterSpacing: '0.08em',
+            textTransform: 'uppercase', userSelect: 'none',
           }}
         >
-          <span style={{ fontSize: isTop ? 20 : 16, fontWeight: 700, color: 'white' }}>
-            {location.score}
+          ✦ BEST TONIGHT
+        </div>
+      )}
+
+      <div className="flex items-start gap-3">
+        {/* Score circle + label */}
+        <div className="flex-shrink-0 flex flex-col items-center gap-1">
+          <div
+            className="flex items-center justify-center rounded-full"
+            style={{
+              width: 56, height: 56,
+              background: s.solid,
+              border: '2px solid rgba(255,255,255,0.9)',
+            }}
+          >
+            <span style={{ fontSize: '1.25rem', fontWeight: 700, color: '#0a0d14', fontFamily: "'JetBrains Mono', monospace", fontVariantNumeric: 'tabular-nums' }}>
+              {location.score}
+            </span>
+          </div>
+          <span style={{ fontSize: '0.5625rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#475569' }}>
+            Score
           </span>
         </div>
 
         {/* Info column */}
-        <div className="flex-1 min-w-0">
-          {/* Title row */}
-          <div className="flex items-start gap-2">
-            <h3
-              className="flex-1 min-w-0 truncate leading-tight"
-              style={{ fontSize: isTop ? '1.0625rem' : '0.9375rem', fontWeight: 600, color: '#ffffff', paddingTop: '1px' }}
-            >
-              {location.name}
-            </h3>
-
-            {isRouteActive && (
-              <div className="flex-shrink-0 flex items-center gap-1 whitespace-nowrap"
-                style={{ fontSize: '9px', fontWeight: 700, padding: '2px 6px', borderRadius: '9999px', background: 'rgba(0,184,122,0.15)', border: '1px solid rgba(0,184,122,0.4)', color: '#00b87a', letterSpacing: '0.06em' }}>
-                <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#00b87a', display: 'inline-block', boxShadow: '0 0 4px #00b87a' }} />
-                ACTIVE
-              </div>
-            )}
-
-            {isTop && !isRouteActive && (
-              <div className="flex-shrink-0 whitespace-nowrap"
-                style={{ fontSize: '9px', fontWeight: 700, padding: '2px 6px', borderRadius: '9999px', background: `${s.hex}1e`, border: `1px solid ${s.hex}45`, color: s.hex, letterSpacing: '0.06em' }}>
-                BEST
-              </div>
-            )}
-          </div>
+        <div className="flex-1 min-w-0" style={{ paddingTop: isTop ? '18px' : '0' }}>
+          {/* Name */}
+          <h3 className="truncate" style={{ fontSize: '1rem', fontWeight: 600, color: '#ffffff', margin: '0 0 1px 0', lineHeight: 1.25 }}>
+            {location.name}
+          </h3>
 
           {/* Type */}
-          <div style={{ fontSize: '0.625rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#8b5cf6', marginTop: '2px' }}>
+          <div style={{ fontSize: '0.625rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#6ee7b7', marginBottom: '8px' }}>
             {location.type}
           </div>
 
-          {/* Stats */}
-          <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1.5">
-            <span className="flex items-center gap-1" style={{ fontSize: '11px', color: '#9ca3af' }}>
-              <Cloud size={10} style={{ color: '#60a5fa' }} />
-              {location.cloudPct ?? '--'}% cloud
+          {/* Active route badge */}
+          {isRouteActive && (
+            <div className="mb-2" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: '0.625rem', fontWeight: 700, padding: '2px 7px', borderRadius: '3px', background: 'rgba(0,255,157,0.10)', border: '1px solid rgba(0,255,157,0.3)', color: '#00ff9d' }}>
+              <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#00ff9d', display: 'inline-block' }} />
+              ACTIVE ROUTE
+            </div>
+          )}
+
+          {/* Info rows */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+            <span className="flex items-center gap-1.5" style={{ fontSize: '0.8125rem', color: '#e2e8f0' }}>
+              <Cloud size={14} style={{ color: '#00ff9d', flexShrink: 0 }} />
+              {location.cloudPct ?? '--'}% cloud cover
             </span>
             {driveInfo ? (
               <>
-                <span className="flex items-center gap-1" style={{ fontSize: '11px', color: '#9ca3af' }}>
-                  <Car size={10} style={{ color: '#00b87a' }} />
-                  {driveInfo.durationMin}min · {driveInfo.distanceKm}km
+                <span className="flex items-center gap-1.5" style={{ fontSize: '0.8125rem', color: '#e2e8f0' }}>
+                  <Car size={14} style={{ color: '#00ff9d', flexShrink: 0 }} />
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontVariantNumeric: 'tabular-nums' }}>
+                    {driveInfo.distanceKm} km
+                  </span>
+                  <span style={{ color: '#94a3b8' }}>away</span>
                 </span>
-                <span className="flex items-center gap-1" style={{ fontSize: '11px', color: '#9ca3af' }}>
-                  <Clock size={10} style={{ color: '#f59e0b' }} />
-                  Leave {driveInfo.leaveBy}
+                <span className="flex items-center gap-1.5" style={{ fontSize: '0.8125rem', color: '#e2e8f0' }}>
+                  <Clock size={14} style={{ color: '#00ff9d', flexShrink: 0 }} />
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontVariantNumeric: 'tabular-nums' }}>
+                    {driveInfo.durationMin} min
+                  </span>
+                  <span style={{ color: '#94a3b8' }}>drive</span>
+                </span>
+                <span className="flex items-center gap-1.5" style={{ fontSize: '0.8125rem', color: '#e2e8f0' }}>
+                  <Calendar size={14} style={{ color: '#00ff9d', flexShrink: 0 }} />
+                  Leave by{' '}
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontVariantNumeric: 'tabular-nums', color: '#ffffff', fontWeight: 600 }}>
+                    {driveInfo.leaveBy}
+                  </span>
                 </span>
               </>
             ) : hasToken ? (
-              <span style={{ fontSize: '10px', fontStyle: 'italic', color: '#6b7280' }}>Fetching route…</span>
+              <span style={{ fontSize: '0.8125rem', fontStyle: 'italic', color: '#475569' }}>Fetching route…</span>
             ) : null}
           </div>
         </div>
@@ -182,26 +174,30 @@ export default function LocationCard({ location, userLocation, isTop, isSelected
         <button
           onClick={handleShowRoute}
           disabled={routeLoading || isRouteActive}
-          className="mt-2.5 flex items-center gap-1.5 w-fit px-3 py-1.5 rounded-xl text-[11px] font-semibold transition-all"
+          className={`mt-3 flex items-center justify-center gap-2 w-full font-bold transition-transform${isTop && !isRouteActive && !routeLoading ? ' route-btn-breathe' : ''}`}
           style={{
-            background:    isRouteActive ? 'rgba(0,184,122,0.12)' : '#8b5cf6',
-            border:        isRouteActive ? '1px solid rgba(0,184,122,0.35)' : '1px solid transparent',
-            color:         isRouteActive ? '#00b87a' : 'white',
+            background:    isRouteActive ? 'rgba(0,255,157,0.08)' : '#00ff9d',
+            border:        isRouteActive ? '1px solid rgba(0,255,157,0.35)' : '1px solid transparent',
+            color:         isRouteActive ? '#00ff9d' : '#0a0d14',
             cursor:        isRouteActive ? 'default' : 'pointer',
-            letterSpacing: '0.02em',
+            letterSpacing: '0.06em',
+            fontSize:      '0.75rem',
+            borderRadius:  6,
+            minHeight:     '36px',
+            padding:       '8px 14px',
           }}
-          onMouseEnter={e => { if (!isRouteActive && !routeLoading) e.currentTarget.style.background = '#7c3aed'; }}
-          onMouseLeave={e => { if (!isRouteActive)                  e.currentTarget.style.background = isRouteActive ? 'rgba(0,184,122,0.12)' : '#8b5cf6'; }}
+          onMouseEnter={e => { if (!isRouteActive && !routeLoading) e.currentTarget.style.background = '#33ffb2'; }}
+          onMouseLeave={e => { if (!isRouteActive) e.currentTarget.style.background = '#00ff9d'; }}
         >
           {isRouteActive ? (
-            <><CheckCircle size={11} /> Active Route</>
+            <><CheckCircle size={13} /> ROUTE ACTIVE ✓</>
           ) : routeLoading ? (
             <>
-              <span style={{ width: 9, height: 9, borderRadius: '50%', border: '1.5px solid rgba(255,255,255,0.4)', borderTopColor: 'white', display: 'inline-block', animation: 'spin 0.7s linear infinite' }} />
+              <span style={{ width: 11, height: 11, borderRadius: '50%', border: '2px solid rgba(0,0,0,0.2)', borderTopColor: '#0a0d14', display: 'inline-block', animation: 'spin 0.7s linear infinite' }} />
               Loading…
             </>
           ) : (
-            <><Navigation size={11} /> Show Route</>
+            <><Navigation size={13} /> SHOW ROUTE →</>
           )}
         </button>
       )}
