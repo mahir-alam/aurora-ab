@@ -103,7 +103,7 @@ export default function App() {
   const topLocation     = locations[0] || null;
 
   return (
-    <div className="min-h-screen" style={{ background: '#1a1d2e', position: 'relative' }}>
+    <div className="min-h-screen" style={{ background: '#0a0d14', position: 'relative' }}>
       <div className="aurora-ambient" />
 
       <div style={{ position: 'relative', zIndex: 1 }}>

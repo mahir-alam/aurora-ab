@@ -5,19 +5,27 @@
 * { box-sizing: border-box; }
 
 body {
-  background-color: #1a1d2e;
-  color: #e5e7eb;
+  background-color: #0a0d14;
+  color: #f1f5f9;
   font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.6;
   margin: 0;
   overflow-x: hidden;
 }
 
+/* ── Monospace data values ── */
+.mono-data {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: #0d1225; }
-::-webkit-scrollbar-thumb { background: #2d3748; border-radius: 3px; }
+::-webkit-scrollbar-track { background: #131722; }
+::-webkit-scrollbar-thumb { background: #1e2638; border-radius: 3px; }
 
-/* ── Aurora background ambient glow (fixed, behind everything) ── */
+/* ── Aurora background — vivid bands, top 40% only ── */
 .aurora-ambient {
   position: fixed;
   inset: 0;
@@ -28,42 +36,34 @@ body {
 .aurora-ambient::before {
   content: '';
   position: absolute;
-  width: 100vw;
-  height: 65vh;
-  top: -5vh;
+  width: 120vw;
+  height: 40vh;
+  top: 0;
   left: -10vw;
-  background: radial-gradient(ellipse 75% 55% at 30% 40%, rgba(139,92,246,0.09) 0%, transparent 65%);
+  background: radial-gradient(ellipse 80% 80% at 40% 10%, rgba(0,255,157,0.18) 0%, rgba(0,255,157,0.06) 50%, transparent 100%);
   animation: aurora-curtain-1 75s ease-in-out infinite alternate;
 }
 .aurora-ambient::after {
   content: '';
   position: absolute;
-  width: 100vw;
-  height: 55vh;
-  bottom: -5vh;
+  width: 110vw;
+  height: 38vh;
+  top: 2vh;
   right: -10vw;
-  background: radial-gradient(ellipse 65% 50% at 70% 70%, rgba(0,184,122,0.07) 0%, transparent 65%);
+  background: radial-gradient(ellipse 70% 75% at 65% 15%, rgba(178,102,255,0.14) 0%, rgba(178,102,255,0.04) 55%, transparent 100%);
   animation: aurora-curtain-2 90s ease-in-out infinite alternate-reverse;
 }
 
 @keyframes aurora-curtain-1 {
-  0%   { transform: translate(0, 0) scale(1);     opacity: 0.7; }
-  30%  { transform: translate(5vw, 3vh) scale(1.1);  opacity: 1;   }
-  60%  { transform: translate(-3vw, 6vh) scale(0.95); opacity: 0.8; }
-  100% { transform: translate(8vw, 2vh) scale(1.05);  opacity: 0.9; }
+  0%   { transform: translate(0, 0) scale(1);        }
+  50%  { transform: translate(5vw, 2vh) scale(1.08); }
+  100% { transform: translate(8vw, 1vh) scale(1.04); }
 }
 
 @keyframes aurora-curtain-2 {
-  0%   { transform: translate(0, 0) scale(1);       opacity: 0.6; }
-  40%  { transform: translate(-6vw, -4vh) scale(1.12); opacity: 1;   }
-  70%  { transform: translate(4vw, -2vh) scale(0.92);  opacity: 0.7; }
-  100% { transform: translate(-3vw, -5vh) scale(1.08);  opacity: 0.85; }
-}
-
-/* keep old name so Header sweep lines still work */
-@keyframes ambient-drift {
-  0%   { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(4vw, 3vh) scale(1.08); }
+  0%   { transform: translate(0, 0) scale(1);          }
+  50%  { transform: translate(-6vw, -2vh) scale(1.10); }
+  100% { transform: translate(-3vw, -3vh) scale(1.05); }
 }
 
 /* ── Animated aurora sweep lines in hero ── */
@@ -75,61 +75,30 @@ body {
 }
 
 .aurora-line-1 {
-  position: absolute;
-  top: 30%;
-  left: 0;
-  width: 60%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #00ff8870, transparent);
+  position: absolute; top: 30%; left: 0; width: 60%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,255,157,0.6), transparent);
   animation: aurora-sweep 7s ease-in-out infinite;
-  animation-delay: 0s;
 }
 .aurora-line-2 {
-  position: absolute;
-  top: 55%;
-  left: 0;
-  width: 80%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #8b5cf650, transparent);
+  position: absolute; top: 55%; left: 0; width: 80%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(178,102,255,0.45), transparent);
   animation: aurora-sweep 9s ease-in-out infinite;
   animation-delay: 2.5s;
 }
 .aurora-line-3 {
-  position: absolute;
-  top: 75%;
-  left: 0;
-  width: 50%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #00ff8840, transparent);
+  position: absolute; top: 75%; left: 0; width: 50%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,255,157,0.4), transparent);
   animation: aurora-sweep 11s ease-in-out infinite;
   animation-delay: 5s;
 }
 
-/* ── KP badge pulse animation ── */
-@keyframes kp-pulse {
-  0%, 100% { box-shadow: 0 0 20px var(--kp-glow), 0 0 40px var(--kp-glow); }
-  50%       { box-shadow: 0 0 35px var(--kp-glow), 0 0 70px var(--kp-glow), 0 0 100px var(--kp-glow); }
-}
-.kp-pulsing { animation: kp-pulse 2s ease-in-out infinite; }
-
-/* ── Text aurora glow ── */
-.aurora-text-glow {
-  text-shadow: 0 0 40px #00ff8855, 0 0 80px #8b5cf630;
-}
-
 /* ── Card hover lift ── */
 .card-lift {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 .card-lift:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.32) !important;
-}
-
-/* ── Stat card shimmer ── */
-@keyframes shimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4) !important;
 }
 
 /* ── Button spinner ── */
@@ -137,35 +106,42 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* ── Best Tonight card border pulse ── */
-@keyframes best-glow-pulse {
-  0%, 100% { box-shadow: 0 0 18px var(--best-glow, rgba(0,184,122,0.35)), 0 4px 16px rgba(0,0,0,0.3); }
-  50%       { box-shadow: 0 0 32px var(--best-glow, rgba(0,184,122,0.38)), 0 0 55px var(--best-glow-dim, rgba(0,184,122,0.15)), 0 4px 16px rgba(0,0,0,0.3); }
+/* ── Best Tonight badge pulse ── */
+@keyframes best-badge-pulse {
+  0%, 100% { opacity: 1; }
+  55%       { opacity: 0.72; }
 }
-.card-best-pulse { animation: best-glow-pulse 2.5s ease-in-out infinite; }
+.best-badge-pulse { animation: best-badge-pulse 2.8s ease-in-out infinite; }
+
+/* ── Show Route button breathe (on Best Tonight card) ── */
+@keyframes route-btn-breathe {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.015); }
+}
+.route-btn-breathe { animation: route-btn-breathe 2.5s ease-in-out infinite; }
 
 /* ── Mapbox overrides ── */
 .mapboxgl-popup-content {
-  background: #242938 !important;
-  color: #e5e7eb !important;
-  border: 1px solid rgba(139,92,246,0.2) !important;
-  border-radius: 12px !important;
+  background: #131722 !important;
+  color: #f1f5f9 !important;
+  border: 1px solid #1e2638 !important;
+  border-radius: 10px !important;
   padding: 12px 16px !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.55) !important;
 }
 .mapboxgl-popup-tip {
-  border-top-color: #242938 !important;
-  border-bottom-color: #242938 !important;
+  border-top-color: #131722 !important;
+  border-bottom-color: #131722 !important;
 }
 .mapboxgl-ctrl-group {
-  background: #242938 !important;
-  border: 1px solid rgba(255,255,255,0.08) !important;
-  border-radius: 10px !important;
+  background: #131722 !important;
+  border: 1px solid #1e2638 !important;
+  border-radius: 8px !important;
   overflow: hidden;
 }
 .mapboxgl-ctrl-group button {
-  background: #242938 !important;
-  border-bottom-color: rgba(255,255,255,0.08) !important;
+  background: #131722 !important;
+  border-bottom-color: #1e2638 !important;
 }
-.mapboxgl-ctrl-group button:hover { background: #2e3549 !important; }
-.mapboxgl-ctrl-icon { filter: invert(0.75); }
+.mapboxgl-ctrl-group button:hover { background: #1e2638 !important; }
+.mapboxgl-ctrl-icon { filter: invert(0.7); }
