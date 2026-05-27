@@ -40,11 +40,11 @@ It then uses GPT to translate technical space weather data into plain-English ad
 
 ## 🛠️ Tech Stack
 
-**Frontend:** React 18, Vite, Tailwind CSS, Mapbox GL JS, Recharts
-**Backend:** Node.js, Express, MongoDB Atlas
-**APIs:** NOAA SWPC, OpenWeatherMap, Mapbox Directions, OpenAI GPT-3.5-turbo
-**Other:** SunCalc for moon phase calculations
-**Deployment:** Render (backend), Vercel (frontend), GitHub Actions for CI, UptimeRobot for monitoring
+- **Frontend:** React 18, Vite, Tailwind CSS, Mapbox GL JS, Recharts
+- **Backend:** Node.js, Express, MongoDB Atlas
+- **APIs:** NOAA SWPC, OpenWeatherMap, Mapbox Directions, OpenAI GPT-3.5-turbo
+- **Other:** SunCalc for moon phase calculations
+- **Deployment:** Render (backend), Vercel (frontend), GitHub Actions for CI, UptimeRobot for monitoring
 
 ## 🧠 AI & GenAI Implementation
 
