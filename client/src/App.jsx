@@ -11,6 +11,7 @@ import Footer from './components/Footer';
 import HistoricalChart from './components/HistoricalChart';
 
 const CALGARY = { lat: 51.0447, lng: -114.0719, label: 'Calgary, AB' };
+const API_BASE = import.meta.env.VITE_API_URL || '';
 
 export default function App() {
   const [userLocation, setUserLocation] = useState(CALGARY);
@@ -33,8 +34,8 @@ export default function App() {
     setActiveRoute(null);
     try {
       const [locRes, forecastRes] = await Promise.all([
-        axios.get(`/api/locations?lat=${loc.lat}&lng=${loc.lng}&location=${encodeURIComponent(loc.label)}`),
-        axios.get('/api/aurora/forecast'),
+        axios.get(`${API_BASE}/api/locations?lat=${loc.lat}&lng=${loc.lng}&location=${encodeURIComponent(loc.label)}`),
+        axios.get(`${API_BASE}/api/aurora/forecast`),
       ]);
 
       const { locations: locs, kp: currentKp, moon: moonData } = locRes.data;
@@ -46,7 +47,7 @@ export default function App() {
 
       if (locs.length > 0) {
         const top = locs[0];
-        axios.post('/api/ai/explain', {
+        axios.post(`${API_BASE}/api/ai/explain`, {
           kp: currentKp,
           cloudCover: top.cloudPct,
           moonPct: moonData?.pct || 0,
@@ -64,10 +65,9 @@ export default function App() {
     }
   }, []);
 
-  // Fetch historical KP for the timeline section
   useEffect(() => {
     setHistLoading(true);
-    axios.get('/api/aurora/history')
+    axios.get(`${API_BASE}/api/aurora/history`)
       .then(r => setHistory(r.data))
       .catch(() => setHistory([]))
       .finally(() => setHistLoading(false));
@@ -132,7 +132,6 @@ export default function App() {
           <StatsRow kp={kp} moon={moon} topLocation={topLocation} loading={loading} lastUpdated={lastUpdated} onRefresh={handleRefresh} />
           <AIExplanation explanation={aiText} loading={loading} />
 
-          {/* Map + Location cards */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div className="lg:col-span-2 rounded-2xl overflow-hidden" style={{ height: '520px' }}>
               <MapView
@@ -166,7 +165,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* Past 7 Days Chart + 3-Day Forecast — side by side */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6">
             <HistoricalChart history={history} loading={histLoading} />
             <ForecastCalendar forecast={forecast} loading={loading} />

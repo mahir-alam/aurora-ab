@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Cloud, Car, Clock, Calendar, Navigation, CheckCircle } from 'lucide-react';
 
+const API_BASE    = import.meta.env.VITE_API_URL || '';
 const CARD_BG     = '#131722';
 const CARD_BORDER = '#1e2638';
 
@@ -56,7 +57,7 @@ export default function LocationCard({ location, userLocation, isTop, isSelected
   useEffect(() => {
     if (!userLocation?.lat || !userLocation?.lng || !hasToken) return;
     let cancelled = false;
-    axios.get(`/api/directions?from_lat=${userLocation.lat}&from_lng=${userLocation.lng}&to_lat=${location.lat}&to_lng=${location.lng}`)
+    axios.get(`${API_BASE}/api/directions?from_lat=${userLocation.lat}&from_lng=${userLocation.lng}&to_lat=${location.lat}&to_lng=${location.lng}`)
       .then(r => { if (!cancelled) setDriveInfo(r.data); })
       .catch(() => {});
     return () => { cancelled = true; };
@@ -68,7 +69,7 @@ export default function LocationCard({ location, userLocation, isTop, isSelected
     if (driveInfo?.geometry) { onShowRoute(location, driveInfo); return; }
     setRouteLoading(true);
     try {
-      const r = await axios.get(`/api/directions?from_lat=${userLocation.lat}&from_lng=${userLocation.lng}&to_lat=${location.lat}&to_lng=${location.lng}`);
+      const r = await axios.get(`${API_BASE}/api/directions?from_lat=${userLocation.lat}&from_lng=${userLocation.lng}&to_lat=${location.lat}&to_lng=${location.lng}`);
       setDriveInfo(r.data);
       onShowRoute(location, r.data);
     } catch (_) {
