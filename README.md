@@ -10,6 +10,18 @@ Know exactly when and where to see the northern lights in Alberta tonight.
 
 ---
 
+## Screenshots
+
+![Overview](screenshots/01-overview.png)
+
+![Interactive map](screenshots/02-map.png)
+
+![Route visualization](screenshots/03-route.png)
+
+![Forecast and 7-day chart](screenshots/04-forecast.png)
+
+---
+
 ## ✨ What It Does
 
 AuroraAB synthesizes 4 independent geophysical data sources into a single viewing recommendation:
