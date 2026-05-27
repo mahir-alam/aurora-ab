@@ -67,4 +67,47 @@ function getDefaultForecast() {
   }));
 }
 
-module.exports = { getCurrentKP, get3DayForecast };
+async function getHistoricalKP() {
+  // Endpoint returns array of objects: { time_tag: "2026-05-19T00:00:00", Kp: 1.67, ... }
+  // 3-hour intervals, UTC timestamps (no Z suffix)
+  const url = 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json';
+  try {
+    const { data } = await axios.get(url, { timeout: 10000 });
+    if (!Array.isArray(data) || data.length === 0) return [];
+
+    const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const byDay = {};
+
+    for (const row of data) {
+      const timeTag = row.time_tag;
+      const kp = parseFloat(row.Kp ?? row.kp_index ?? 0);
+      if (!timeTag || isNaN(kp)) continue;
+
+      // Timestamps are UTC without Z — append it for correct parsing
+      const ts = new Date(timeTag + 'Z').getTime();
+      if (isNaN(ts) || ts < sevenDaysAgo || ts > Date.now() + 3600000) continue;
+
+      const dateKey = timeTag.slice(0, 10); // YYYY-MM-DD
+      if (!byDay[dateKey]) byDay[dateKey] = [];
+      byDay[dateKey].push(kp);
+    }
+
+    return Object.entries(byDay)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([dateKey, kps]) => {
+        const avg = kps.reduce((a, b) => a + b, 0) / kps.length;
+        const d   = new Date(dateKey + 'T12:00:00Z');
+        return {
+          date:      d.toLocaleDateString('en-US', { weekday: 'short', timeZone: 'America/Edmonton' }),
+          dateShort: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'America/Edmonton' }),
+          kp:        parseFloat(avg.toFixed(1)),
+        };
+      })
+      .slice(-7);
+  } catch (err) {
+    console.error('NOAA historical KP fetch failed:', err.message);
+    return [];
+  }
+}
+
+module.exports = { getCurrentKP, get3DayForecast, getHistoricalKP };
