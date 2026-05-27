@@ -12,13 +12,16 @@ Know exactly when and where to see the northern lights in Alberta tonight.
 
 ## Screenshots
 
-![Overview](screenshots/01-overview.png)
-
-![Interactive map](screenshots/02-map.png)
-
-![Route visualization](screenshots/03-route.png)
-
-![Forecast and 7-day chart](screenshots/04-forecast.png)
+<table>
+  <tr>
+    <td><img src="screenshots/01-overview.png" alt="Overview" width="400" /></td>
+    <td><img src="screenshots/02-map.png" alt="Interactive map" width="400" /></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/03-route.png" alt="Route visualization" width="400" /></td>
+    <td><img src="screenshots/04-forecast.png" alt="Forecast and 7-day chart" width="400" /></td>
+  </tr>
+</table>
 
 ---
 
