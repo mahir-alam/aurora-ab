@@ -8,6 +8,7 @@ import AIExplanation from './components/AIExplanation';
 import SearchBar from './components/SearchBar';
 import StatsRow from './components/StatsRow';
 import Footer from './components/Footer';
+import HistoricalChart from './components/HistoricalChart';
 
 const CALGARY = { lat: 51.0447, lng: -114.0719, label: 'Calgary, AB' };
 
@@ -23,11 +24,13 @@ export default function App() {
   const [selected, setSelected]         = useState(null);
   const [activeRoute, setActiveRoute]   = useState(null);
   const [lastUpdated, setLastUpdated]   = useState(null);
+  const [history, setHistory]           = useState([]);
+  const [histLoading, setHistLoading]   = useState(true);
 
   const fetchData = useCallback(async (loc) => {
     setLoading(true);
     setError(null);
-    setActiveRoute(null); // clear any active route on data refresh
+    setActiveRoute(null);
     try {
       const [locRes, forecastRes] = await Promise.all([
         axios.get(`/api/locations?lat=${loc.lat}&lng=${loc.lng}&location=${encodeURIComponent(loc.label)}`),
@@ -61,6 +64,15 @@ export default function App() {
     }
   }, []);
 
+  // Fetch historical KP for the timeline section
+  useEffect(() => {
+    setHistLoading(true);
+    axios.get('/api/aurora/history')
+      .then(r => setHistory(r.data))
+      .catch(() => setHistory([]))
+      .finally(() => setHistLoading(false));
+  }, []);
+
   useEffect(() => {
     fetchData(CALGARY);
     if (navigator.geolocation) {
@@ -81,8 +93,6 @@ export default function App() {
     fetchData(loc);
   };
 
-  // Called when user clicks "Show Route" on a card
-  // driveInfo already contains geometry from the backend response
   const handleShowRoute = (location, driveInfo) => {
     setActiveRoute({
       locationId: location.id,
@@ -156,7 +166,9 @@ export default function App() {
             </div>
           </div>
 
-          <div className="pb-6">
+          {/* Past 7 Days Chart + 3-Day Forecast — side by side */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6">
+            <HistoricalChart history={history} loading={histLoading} />
             <ForecastCalendar forecast={forecast} loading={loading} />
           </div>
         </main>

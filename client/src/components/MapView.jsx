@@ -320,7 +320,7 @@ export default function MapView({ locations, userLocation, selected, onSelect, a
         .setHTML(`
           <div style="font-family:'Inter',system-ui,sans-serif">
             <div style="font-weight:600;font-size:13px;color:#f1f5f9;margin-bottom:3px">${loc.name}</div>
-            <div style="font-size:12px;color:${hex};font-weight:600">${loc.scoreLabel} · ${loc.score}/100</div>
+            <div style="font-size:12px;color:${hex};font-weight:600">Viewing Score: ${loc.score}/100</div>
             <div style="font-size:11px;color:#94a3b8;margin-top:2px">☁️ ${loc.cloudPct ?? '--'}% cloud cover</div>
           </div>
         `);

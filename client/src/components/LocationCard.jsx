@@ -11,6 +11,41 @@ function getStyle(score) {
   return              { solid: '#ef4444', hex: '#ef4444' };
 }
 
+function ScoreLabel() {
+  const [show, setShow] = useState(false);
+  return (
+    <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+      <span style={{ fontSize: '0.5625rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#475569' }}>
+        Viewing Score
+      </span>
+      <span
+        onMouseEnter={() => setShow(true)}
+        onMouseLeave={() => setShow(false)}
+        style={{
+          width: 11, height: 11, borderRadius: '50%',
+          background: '#1e2638', border: '1px solid #2d3748',
+          color: '#64748b', fontSize: '0.4375rem', fontWeight: 700,
+          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+          cursor: 'default', flexShrink: 0, lineHeight: 1,
+        }}
+      >i</span>
+      {show && (
+        <div style={{
+          position: 'absolute',
+          left: 'calc(100% + 6px)', top: '50%', transform: 'translateY(-50%)',
+          zIndex: 200, width: 190,
+          background: '#1a1f30', border: '1px solid #2d3a52', borderRadius: 6,
+          padding: '7px 10px', fontSize: '0.6875rem', color: '#94a3b8',
+          lineHeight: 1.5, pointerEvents: 'none',
+          boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
+        }}>
+          Combines KP index, cloud cover, and moon brightness into a 0–100 score. Higher = better aurora viewing tonight.
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function LocationCard({ location, userLocation, isTop, isSelected, isRouteActive, onShowRoute, onClick }) {
   const [driveInfo,    setDriveInfo]    = useState(null);
   const [routeLoading, setRouteLoading] = useState(false);
@@ -60,7 +95,6 @@ export default function LocationCard({ location, userLocation, isTop, isSelected
       }
     : { border: `1px solid ${CARD_BORDER}` };
 
-  // isTop 4px left border — compensate left padding
   const padLeft = isTop ? '12px' : '16px';
 
   return (
@@ -75,7 +109,7 @@ export default function LocationCard({ location, userLocation, isTop, isSelected
         padding: `16px 16px 16px ${padLeft}`,
       }}
     >
-      {/* Best Tonight badge — absolute top-right */}
+      {/* Best Tonight badge */}
       {isTop && !isRouteActive && (
         <div
           className="best-badge-pulse"
@@ -103,28 +137,28 @@ export default function LocationCard({ location, userLocation, isTop, isSelected
               border: '2px solid rgba(255,255,255,0.9)',
             }}
           >
-            <span style={{ fontSize: '1.25rem', fontWeight: 700, color: '#0a0d14', fontFamily: "'JetBrains Mono', monospace", fontVariantNumeric: 'tabular-nums' }}>
-              {location.score}
-            </span>
+            <div style={{ textAlign: 'center', lineHeight: 1 }}>
+              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#0a0d14', fontFamily: "'JetBrains Mono', monospace", fontVariantNumeric: 'tabular-nums' }}>
+                {location.score}
+              </div>
+              <div style={{ fontSize: '0.4375rem', fontWeight: 600, color: 'rgba(10,13,20,0.6)', letterSpacing: '0.02em' }}>
+                /100
+              </div>
+            </div>
           </div>
-          <span style={{ fontSize: '0.5625rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#475569' }}>
-            Score
-          </span>
+          <ScoreLabel />
         </div>
 
         {/* Info column */}
         <div className="flex-1 min-w-0" style={{ paddingTop: isTop ? '18px' : '0' }}>
-          {/* Name */}
           <h3 className="truncate" style={{ fontSize: '1rem', fontWeight: 600, color: '#ffffff', margin: '0 0 1px 0', lineHeight: 1.25 }}>
             {location.name}
           </h3>
 
-          {/* Type */}
           <div style={{ fontSize: '0.625rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#6ee7b7', marginBottom: '8px' }}>
             {location.type}
           </div>
 
-          {/* Active route badge */}
           {isRouteActive && (
             <div className="mb-2" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: '0.625rem', fontWeight: 700, padding: '2px 7px', borderRadius: '3px', background: 'rgba(0,255,157,0.10)', border: '1px solid rgba(0,255,157,0.3)', color: '#00ff9d' }}>
               <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#00ff9d', display: 'inline-block' }} />
@@ -132,7 +166,6 @@ export default function LocationCard({ location, userLocation, isTop, isSelected
             </div>
           )}
 
-          {/* Info rows */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
             <span className="flex items-center gap-1.5" style={{ fontSize: '0.8125rem', color: '#e2e8f0' }}>
               <Cloud size={14} style={{ color: '#00ff9d', flexShrink: 0 }} />

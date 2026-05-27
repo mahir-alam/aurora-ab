@@ -33,6 +33,16 @@ function kpToDesc(kp) {
   return 'Aurora unlikely. Great night for stargazing instead.';
 }
 
+function getForecastDate(dayOffset) {
+  const d = new Date();
+  d.setDate(d.getDate() + dayOffset);
+  const tz  = 'America/Edmonton';
+  const dow = d.toLocaleDateString('en-US', { weekday: 'short', timeZone: tz });
+  const mon = d.toLocaleDateString('en-US', { month: 'short',   timeZone: tz });
+  const day = d.toLocaleDateString('en-US', { day: 'numeric',   timeZone: tz });
+  return `${dow}, ${mon} ${day}`;
+}
+
 function KpDots({ maxKp, hex }) {
   const filled = kpToDots(maxKp);
   return (
@@ -46,11 +56,9 @@ function KpDots({ maxKp, hex }) {
           }} />
         ))}
       </div>
-
       <div style={{ fontSize: '0.875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: hex, textAlign: 'center', marginBottom: '6px' }}>
         {kpToActivity(maxKp)}
       </div>
-
       <div style={{ fontSize: '0.8125rem', lineHeight: 1.5, color: '#f1f5f9', textAlign: 'center', padding: '0 4px' }}>
         {kpToDesc(maxKp)}
       </div>
@@ -58,23 +66,13 @@ function KpDots({ maxKp, hex }) {
   );
 }
 
-function getForecastDate(dayOffset) {
-  const d = new Date();
-  d.setDate(d.getDate() + dayOffset);
-  const tz  = 'America/Edmonton';
-  const dow = d.toLocaleDateString('en-US', { weekday: 'short', timeZone: tz });
-  const mon = d.toLocaleDateString('en-US', { month: 'short',   timeZone: tz });
-  const day = d.toLocaleDateString('en-US', { day: 'numeric',   timeZone: tz });
-  return `${dow}, ${mon} ${day}`;
-}
-
 export default function ForecastCalendar({ forecast, loading }) {
   return (
     <div>
       <h2 style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#475569', marginBottom: '12px' }}>
-        3-Day KP Forecast
+        3-Day Forecast
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {loading
           ? Array.from({ length: 3 }).map((_, i) => (
               <div key={i} className="animate-pulse" style={{ height: 240, borderRadius: 8, background: '#131722' }} />
