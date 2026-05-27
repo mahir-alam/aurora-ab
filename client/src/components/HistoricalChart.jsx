@@ -9,10 +9,10 @@ function CustomTooltip({ active, payload }) {
   const item = payload[0];
   return (
     <div style={{
-      background: '#1a1f30', border: '1px solid #2d3a52', borderRadius: 8,
+      background: '#1a1d2e', border: '1px solid #475569', borderRadius: 8,
       padding: '8px 12px', fontSize: '0.8125rem',
     }}>
-      <div style={{ fontWeight: 600, color: '#ffffff', marginBottom: 2 }}>
+      <div style={{ fontWeight: 600, color: '#f1f5f9', marginBottom: 2 }}>
         {item.payload.dateShort}
       </div>
       <div style={{ color: '#00ff9d', fontFamily: "'JetBrains Mono', monospace" }}>
@@ -31,10 +31,10 @@ export default function HistoricalChart({ history, loading }) {
 
   return (
     <div style={{ background: '#131722', border: '1px solid #1e2638', borderRadius: 8, padding: '16px' }}>
-      <h2 style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#475569', margin: '0 0 2px 0' }}>
+      <h2 style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#f1f5f9', margin: '0 0 2px 0' }}>
         Past 7 Days
       </h2>
-      <p style={{ fontSize: '0.6875rem', color: '#334155', margin: '0 0 14px 0' }}>
+      <p style={{ fontSize: '0.6875rem', color: '#cbd5e1', margin: '0 0 14px 0' }}>
         KP Activity Trend
       </p>
 
@@ -58,14 +58,14 @@ export default function HistoricalChart({ history, loading }) {
             <CartesianGrid strokeDasharray="3 3" stroke="#1e2638" vertical={false} />
             <XAxis
               dataKey="label"
-              tick={{ fill: '#475569', fontSize: 11 }}
+              tick={{ fill: '#cbd5e1', fontSize: 11, fontWeight: 500 }}
               axisLine={false}
               tickLine={false}
             />
             <YAxis
               domain={[0, 9]}
               ticks={[0, 3, 6, 9]}
-              tick={{ fill: '#475569', fontSize: 11 }}
+              tick={{ fill: '#cbd5e1', fontSize: 11, fontWeight: 500 }}
               axisLine={false}
               tickLine={false}
             />
@@ -74,7 +74,7 @@ export default function HistoricalChart({ history, loading }) {
               y={4}
               stroke="#2d3a52"
               strokeDasharray="4 3"
-              label={{ value: 'Aurora visible in Alberta', position: 'insideTopLeft', fill: '#334155', fontSize: 10 }}
+              label={{ value: 'Aurora visible in Alberta', position: 'insideTopLeft', fill: '#f1f5f9', fontSize: 11, fontWeight: 500 }}
             />
             <Area
               type="monotone"
@@ -89,7 +89,7 @@ export default function HistoricalChart({ history, loading }) {
         </ResponsiveContainer>
       )}
 
-      <p style={{ fontSize: '0.6875rem', fontStyle: 'italic', color: '#334155', margin: '8px 0 0 0' }}>
+      <p style={{ fontSize: '11px', fontStyle: 'italic', color: '#94a3b8', margin: '8px 0 0 0' }}>
         NOAA SWPC · Daily averages
       </p>
     </div>
