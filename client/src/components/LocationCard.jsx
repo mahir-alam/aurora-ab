@@ -188,12 +188,18 @@ export default function LocationCard({ location, userLocation, isTop, isSelected
                   </span>
                   <span style={{ color: '#94a3b8' }}>drive</span>
                 </span>
-                <span className="flex items-center gap-1.5" style={{ fontSize: '0.8125rem', color: '#e2e8f0' }}>
-                  <Calendar size={14} style={{ color: '#00ff9d', flexShrink: 0 }} />
-                  Leave by{' '}
-                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontVariantNumeric: 'tabular-nums', color: '#ffffff', fontWeight: 600 }}>
-                    {driveInfo.leaveBy}
-                  </span>
+                <span className="flex items-center gap-1.5" style={{
+                  fontSize: '0.8125rem',
+                  color: driveInfo.leaveBy.includes('passed') ? '#64748b' : '#e2e8f0',
+                  fontStyle: driveInfo.leaveBy.includes('passed') ? 'italic' : 'normal',
+                }}>
+                  <Calendar size={14} style={{ color: driveInfo.leaveBy.includes('passed') ? '#334155' : '#00ff9d', flexShrink: 0 }} />
+                  {driveInfo.leaveBy.startsWith('Leave')
+                    ? <span style={{ color: '#ffffff', fontWeight: 600 }}>{driveInfo.leaveBy}</span>
+                    : driveInfo.leaveBy.includes('passed')
+                    ? "Tonight's window has passed — check tomorrow"
+                    : <>Leave by{' '}<span style={{ fontFamily: "'JetBrains Mono', monospace", fontVariantNumeric: 'tabular-nums', color: '#ffffff', fontWeight: 600 }}>{driveInfo.leaveBy}</span></>
+                  }
                 </span>
               </>
             ) : hasToken ? (
