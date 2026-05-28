@@ -4,7 +4,7 @@
 
 > Real-time aurora borealis visibility forecasting for Alberta, Canada.
 
-**🔴 [Live Demo](https://aurora-ab.vercel.app)**
+**🔴 [Live Demo](https://aurora-ab.vercel.app)** · **🎥 [Video Walkthrough](https://youtu.be/jvW11cFrlnQ)**
 
 Know exactly when and where to see the northern lights in Alberta tonight.
 
